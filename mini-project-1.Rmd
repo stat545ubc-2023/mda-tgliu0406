@@ -84,10 +84,10 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: CHOICE_1\_HERE\
-2: CHOICE_2\_HERE\
-3: CHOICE_3\_HERE\
-4: CHOICE_4\_HERE
+1: steam_games
+2: flow_sample
+3: cancer_sample
+4: building_permits
 
 <!----------------------------------------------------------------------------->
 
@@ -99,21 +99,46 @@ And that is exactly the first thing that you will do!
 
 ```{r}
 ### EXPLORE HERE ###
-steam_games
+# column names, number of data entries, and class of steam_games
+colnames(steam_games)
+nrow(steam_games)
+class(steam_games)
 ```
+
+```{r}
+# column names, number of data entries, and class of flow_sample
+colnames(flow_sample)
+nrow(flow_sample)
+class(flow_sample)
+```
+
+```{r}
+# column names, number of data entries, and class of cancer_sample
+colnames(cancer_sample)
+nrow(cancer_sample)
+class(cancer_sample)
+```
+
+```{r}
+# column names, number of data entries, and class of building_permits
+colnames(building_permits)
+nrow(building_permits)
+class(building_permits)
+```
+
 
 <!----------------------------------------------------------------------------->
 
 1.3 **(1 point)** Now that you've explored the 4 datasets that you were initially most interested in, let's narrow it down to 1. What lead you to choose this one? Briefly explain your choice below.
 
 <!-------------------------- Start your work below ---------------------------->
-
+I would like to explore more on the dataset "flow_sample". It contains information of a time series of annual maximum and minimum flows at a particular station, and I would like to explore more on the trend and magnitude of the annual maximum and annual minimum flow.
 <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a  final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with your dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
-
+What is the distribution of annual flow data look like?
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -142,6 +167,32 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 2.2 **(4 points)** For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+### 1. Plot the distribution of a numeric variable
+### plot the histogram of flow
+ggplot(flow_sample) +
+  geom_histogram(aes(x = flow), fill = "steelblue")
+
+### 5. Filter observations in your data according to your own criteria
+### filter the observations of annual minimum flow
+flow_sample %>%
+  filter(extreme_type == "minimum")
+### filter the observations of annual maximum flow
+flow_sample %>%
+  filter(extreme_type == "maximum")
+
+### 7. Make a new tibble with a subset of your data
+### make new tibble with recorded maximum flows
+maximum_flow = 
+  flow_sample %>%
+  filter(extreme_type == "maximum", !is.na(flow))
+maximum_flow
+
+### 8. Use a density plot to explore any of your variables 
+### make density plot of flow
+ggplot(flow_sample) +
+  geom_density(aes(x = flow))
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -150,7 +201,10 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 **(4 points)** So far, you have chosen a dataset and gotten familiar with it through exploring the data. You have also brainstormed one research question that interested you (Task 1.4).  Now it's time to pick 4 research questions that you would like to explore in Milestone 2! Write the 4 questions and any additional comments below. 
 
 <!--- *****START HERE***** --->
-
+1. On which year was the most extreme maximum flow?
+2. For how many years do we have 0 as annual minimum flow?
+3. What is the probability of have an annual maximum flow exceeding 300?
+4. When do we normally observe a maximum flow in a year?
 <!----------------------------->
 
 # Overall reproducibility/Cleanliness/Coherence Checklist 
