@@ -1,6 +1,6 @@
 ---
 title: "Mini Data-Analysis Deliverable 1"
-output: html_document
+output: github_document
 ---
 
 # Welcome to your (maybe) first-ever data analysis project!
@@ -169,11 +169,14 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 <!-------------------------- Start your work below ---------------------------->
 ```{r}
 ### 1. Plot the distribution of a numeric variable
-### plot the histogram of flow
+### plot the boxplot of flow and the plot gives a general sense on how the flow levels were distributed. 
+### The plot shows that the distribution of flow levels is highly right-skewed.
 ggplot(flow_sample) +
-  geom_histogram(aes(x = flow), fill = "steelblue")
+  geom_boxplot(aes(y = flow), fill = "steelblue")
 
 ### 5. Filter observations in your data according to your own criteria
+### It is natural to split the dataset based on extreme type, so that later we can 
+### explore the maximum flows and minimum flows separately.
 ### filter the observations of annual minimum flow
 flow_sample %>%
   filter(extreme_type == "minimum")
@@ -182,6 +185,7 @@ flow_sample %>%
   filter(extreme_type == "maximum")
 
 ### 7. Make a new tibble with a subset of your data
+### Here we choose the subset based on two criteria: extreme type is maximum, and flow level record is not missing.
 ### make new tibble with recorded maximum flows
 maximum_flow = 
   flow_sample %>%
@@ -189,7 +193,8 @@ maximum_flow =
 maximum_flow
 
 ### 8. Use a density plot to explore any of your variables 
-### make density plot of flow
+### make density plot of flow, this again gives a general sense on how the flow levels are distributed.
+### The density is bimodal, which makes sense because the dataset includes both minimum and maximum flow levels.
 ggplot(flow_sample) +
   geom_density(aes(x = flow))
 ```
@@ -201,7 +206,7 @@ ggplot(flow_sample) +
 **(4 points)** So far, you have chosen a dataset and gotten familiar with it through exploring the data. You have also brainstormed one research question that interested you (Task 1.4).  Now it's time to pick 4 research questions that you would like to explore in Milestone 2! Write the 4 questions and any additional comments below. 
 
 <!--- *****START HERE***** --->
-1. On which year was the most extreme maximum flow?
+1. On which year was the most extreme maximum flow occured?
 2. For how many years do we have 0 as annual minimum flow?
 3. What is the probability of have an annual maximum flow exceeding 300?
 4. When do we normally observe a maximum flow in a year?

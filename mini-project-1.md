@@ -1,0 +1,548 @@
+Mini Data-Analysis Deliverable 1
+================
+
+# Welcome to your (maybe) first-ever data analysis project!
+
+And hopefully the first of many. Let’s get started:
+
+1.  Install the [`datateachr`](https://github.com/UBC-MDS/datateachr)
+    package by typing the following into your **R terminal**:
+
+<!-- -->
+
+    install.packages("devtools")
+    devtools::install_github("UBC-MDS/datateachr")
+
+2.  Load the packages below.
+
+``` r
+library(datateachr)
+library(tidyverse)
+```
+
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
+    ## ✔ tidyr   1.2.0     ✔ stringr 1.5.0
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
+
+    ## Warning: 程辑包'ggplot2'是用R版本4.2.2 来建造的
+
+    ## Warning: 程辑包'stringr'是用R版本4.2.3 来建造的
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+
+3.  Make a repository in the <https://github.com/stat545ubc-2023>
+    Organization. You can do this by following the steps found on canvas
+    in the entry called [MDA: Create a
+    repository](https://canvas.ubc.ca/courses/126199/pages/mda-create-a-repository).
+    One completed, your repository should automatically be listed as
+    part of the stat545ubc-2023 Organization.
+
+# Instructions
+
+## For Both Milestones
+
+-   Each milestone has explicit tasks. Tasks that are more challenging
+    will often be allocated more points.
+
+-   Each milestone will be also graded for reproducibility, cleanliness,
+    and coherence of the overall Github submission.
+
+-   While the two milestones will be submitted as independent
+    deliverables, the analysis itself is a continuum - think of it as
+    two chapters to a story. Each chapter, or in this case, portion of
+    your analysis, should be easily followed through by someone
+    unfamiliar with the content.
+    [Here](https://swcarpentry.github.io/r-novice-inflammation/06-best-practices-R/)
+    is a good resource for what constitutes “good code”. Learning good
+    coding practices early in your career will save you hassle later on!
+
+-   The milestones will be equally weighted.
+
+## For Milestone 1
+
+**To complete this milestone**, edit [this very `.Rmd`
+file](https://raw.githubusercontent.com/UBC-STAT/stat545.stat.ubc.ca/master/content/mini-project/mini-project-1.Rmd)
+directly. Fill in the sections that are tagged with
+`<!--- start your work below --->`.
+
+**To submit this milestone**, make sure to knit this `.Rmd` file to an
+`.md` file by changing the YAML output settings from
+`output: html_document` to `output: github_document`. Commit and push
+all of your work to the mini-analysis GitHub repository you made
+earlier, and tag a release on GitHub. Then, submit a link to your tagged
+release on canvas.
+
+**Points**: This milestone is worth 36 points: 30 for your analysis, and
+6 for overall reproducibility, cleanliness, and coherence of the Github
+submission.
+
+# Learning Objectives
+
+By the end of this milestone, you should:
+
+-   Become familiar with your dataset of choosing
+-   Select 4 questions that you would like to answer with your data
+-   Generate a reproducible and clear report using R Markdown
+-   Become familiar with manipulating and summarizing your data in
+    tibbles using `dplyr`, with a research question in mind.
+
+# Task 1: Choose your favorite dataset
+
+The `datateachr` package by Hayley Boyce and Jordan Bourak currently
+composed of 7 semi-tidy datasets for educational purposes. Here is a
+brief description of each dataset:
+
+-   *apt_buildings*: Acquired courtesy of The City of Toronto’s Open
+    Data Portal. It currently has 3455 rows and 37 columns.
+
+-   *building_permits*: Acquired courtesy of The City of Vancouver’s
+    Open Data Portal. It currently has 20680 rows and 14 columns.
+
+-   *cancer_sample*: Acquired courtesy of UCI Machine Learning
+    Repository. It currently has 569 rows and 32 columns.
+
+-   *flow_sample*: Acquired courtesy of The Government of Canada’s
+    Historical Hydrometric Database. It currently has 218 rows and 7
+    columns.
+
+-   *parking_meters*: Acquired courtesy of The City of Vancouver’s Open
+    Data Portal. It currently has 10032 rows and 22 columns.
+
+-   *steam_games*: Acquired courtesy of Kaggle. It currently has 40833
+    rows and 21 columns.
+
+-   *vancouver_trees*: Acquired courtesy of The City of Vancouver’s Open
+    Data Portal. It currently has 146611 rows and 20 columns.
+
+**Things to keep in mind**
+
+-   We hope that this project will serve as practice for carrying our
+    your own *independent* data analysis. Remember to comment your code,
+    be explicit about what you are doing, and write notes in this
+    markdown document when you feel that context is required. As you
+    advance in the project, prompts and hints to do this will be
+    diminished - it’ll be up to you!
+
+-   Before choosing a dataset, you should always keep in mind **your
+    goal**, or in other ways, *what you wish to achieve with this data*.
+    This mini data-analysis project focuses on *data wrangling*,
+    *tidying*, and *visualization*. In short, it’s a way for you to get
+    your feet wet with exploring data on your own.
+
+And that is exactly the first thing that you will do!
+
+1.1 **(1 point)** Out of the 7 datasets available in the `datateachr`
+package, choose **4** that appeal to you based on their description.
+Write your choices below:
+
+**Note**: We encourage you to use the ones in the `datateachr` package,
+but if you have a dataset that you’d really like to use, you can include
+it here. But, please check with a member of the teaching team to see
+whether the dataset is of appropriate complexity. Also, include a
+**brief** description of the dataset here to help the teaching team
+understand your data.
+
+<!-------------------------- Start your work below ---------------------------->
+
+1: steam_games 2: flow_sample 3: cancer_sample 4: building_permits
+
+<!----------------------------------------------------------------------------->
+
+1.2 **(6 points)** One way to narrowing down your selection is to
+*explore* the datasets. Use your knowledge of dplyr to find out at least
+*3* attributes about each of these datasets (an attribute is something
+such as number of rows, variables, class type…). The goal here is to
+have an idea of *what the data looks like*.
+
+*Hint:* This is one of those times when you should think about the
+cleanliness of your analysis. I added a single code chunk for you below,
+but do you want to use more than one? Would you like to write more
+comments outside of the code chunk?
+
+<!-------------------------- Start your work below ---------------------------->
+
+``` r
+### EXPLORE HERE ###
+# column names, number of data entries, and class of steam_games
+colnames(steam_games)
+```
+
+    ##  [1] "id"                       "url"                     
+    ##  [3] "types"                    "name"                    
+    ##  [5] "desc_snippet"             "recent_reviews"          
+    ##  [7] "all_reviews"              "release_date"            
+    ##  [9] "developer"                "publisher"               
+    ## [11] "popular_tags"             "game_details"            
+    ## [13] "languages"                "achievements"            
+    ## [15] "genre"                    "game_description"        
+    ## [17] "mature_content"           "minimum_requirements"    
+    ## [19] "recommended_requirements" "original_price"          
+    ## [21] "discount_price"
+
+``` r
+nrow(steam_games)
+```
+
+    ## [1] 40833
+
+``` r
+class(steam_games)
+```
+
+    ## [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"
+
+``` r
+# column names, number of data entries, and class of flow_sample
+colnames(flow_sample)
+```
+
+    ## [1] "station_id"   "year"         "extreme_type" "month"        "day"         
+    ## [6] "flow"         "sym"
+
+``` r
+nrow(flow_sample)
+```
+
+    ## [1] 218
+
+``` r
+class(flow_sample)
+```
+
+    ## [1] "tbl_df"     "tbl"        "data.frame"
+
+``` r
+# column names, number of data entries, and class of cancer_sample
+colnames(cancer_sample)
+```
+
+    ##  [1] "ID"                      "diagnosis"              
+    ##  [3] "radius_mean"             "texture_mean"           
+    ##  [5] "perimeter_mean"          "area_mean"              
+    ##  [7] "smoothness_mean"         "compactness_mean"       
+    ##  [9] "concavity_mean"          "concave_points_mean"    
+    ## [11] "symmetry_mean"           "fractal_dimension_mean" 
+    ## [13] "radius_se"               "texture_se"             
+    ## [15] "perimeter_se"            "area_se"                
+    ## [17] "smoothness_se"           "compactness_se"         
+    ## [19] "concavity_se"            "concave_points_se"      
+    ## [21] "symmetry_se"             "fractal_dimension_se"   
+    ## [23] "radius_worst"            "texture_worst"          
+    ## [25] "perimeter_worst"         "area_worst"             
+    ## [27] "smoothness_worst"        "compactness_worst"      
+    ## [29] "concavity_worst"         "concave_points_worst"   
+    ## [31] "symmetry_worst"          "fractal_dimension_worst"
+
+``` r
+nrow(cancer_sample)
+```
+
+    ## [1] 569
+
+``` r
+class(cancer_sample)
+```
+
+    ## [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"
+
+``` r
+# column names, number of data entries, and class of building_permits
+colnames(building_permits)
+```
+
+    ##  [1] "permit_number"               "issue_date"                 
+    ##  [3] "project_value"               "type_of_work"               
+    ##  [5] "address"                     "project_description"        
+    ##  [7] "building_contractor"         "building_contractor_address"
+    ##  [9] "applicant"                   "applicant_address"          
+    ## [11] "property_use"                "specific_use_category"      
+    ## [13] "year"                        "bi_id"
+
+``` r
+nrow(building_permits)
+```
+
+    ## [1] 20680
+
+``` r
+class(building_permits)
+```
+
+    ## [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"
+
+<!----------------------------------------------------------------------------->
+
+1.3 **(1 point)** Now that you’ve explored the 4 datasets that you were
+initially most interested in, let’s narrow it down to 1. What lead you
+to choose this one? Briefly explain your choice below.
+
+<!-------------------------- Start your work below ---------------------------->
+
+I would like to explore more on the dataset “flow_sample”. It contains
+information of a time series of annual maximum and minimum flows at a
+particular station, and I would like to explore more on the trend and
+magnitude of the annual maximum and annual minimum flow.
+<!----------------------------------------------------------------------------->
+
+1.4 **(2 points)** Time for a final decision! Going back to the
+beginning, it’s important to have an *end goal* in mind. For example, if
+I had chosen the `titanic` dataset for my project, I might’ve wanted to
+explore the relationship between survival and other variables. Try to
+think of 1 research question that you would want to answer with your
+dataset. Note it down below.
+
+<!-------------------------- Start your work below ---------------------------->
+
+What is the distribution of annual flow data look like?
+<!----------------------------------------------------------------------------->
+
+# Important note
+
+Read Tasks 2 and 3 *fully* before starting to complete either of them.
+Probably also a good point to grab a coffee to get ready for the fun
+part!
+
+This project is semi-guided, but meant to be *independent*. For this
+reason, you will complete tasks 2 and 3 below (under the **START HERE**
+mark) as if you were writing your own exploratory data analysis report,
+and this guidance never existed! Feel free to add a brief introduction
+section to your project, format the document with markdown syntax as you
+deem appropriate, and structure the analysis as you deem appropriate. If
+you feel lost, you can find a sample data analysis
+[here](https://www.kaggle.com/headsortails/tidy-titarnic) to have a
+better idea. However, bear in mind that it is **just an example** and
+you will not be required to have that level of complexity in your
+project.
+
+# Task 2: Exploring your dataset
+
+If we rewind and go back to the learning objectives, you’ll see that by
+the end of this deliverable, you should have formulated *4* research
+questions about your data that you may want to answer during your
+project. However, it may be handy to do some more exploration on your
+dataset of choice before creating these questions - by looking at the
+data, you may get more ideas. **Before you start this task, read all
+instructions carefully until you reach START HERE under Task 3**.
+
+2.1 **(12 points)** Complete *4 out of the following 8 exercises* to
+dive deeper into your data. All datasets are different and therefore,
+not all of these tasks may make sense for your data - which is why you
+should only answer *4*.
+
+Make sure that you’re using dplyr and ggplot2 rather than base R for
+this task. Outside of this project, you may find that you prefer using
+base R functions for certain tasks, and that’s just fine! But part of
+this project is for you to practice the tools we learned in class, which
+is dplyr and ggplot2.
+
+1.  Plot the distribution of a numeric variable.
+2.  Create a new variable based on other variables in your data (only if
+    it makes sense)
+3.  Investigate how many missing values there are per variable. Can you
+    find a way to plot this?
+4.  Explore the relationship between 2 variables in a plot.
+5.  Filter observations in your data according to your own criteria.
+    Think of what you’d like to explore - again, if this was the
+    `titanic` dataset, I may want to narrow my search down to passengers
+    born in a particular year…
+6.  Use a boxplot to look at the frequency of different observations
+    within a single variable. You can do this for more than one variable
+    if you wish!
+7.  Make a new tibble with a subset of your data, with variables and
+    observations that you are interested in exploring.
+8.  Use a density plot to explore any of your variables (that are
+    suitable for this type of plot).
+
+2.2 **(4 points)** For each of the 4 exercises that you complete,
+provide a *brief explanation* of why you chose that exercise in relation
+to your data (in other words, why does it make sense to do that?), and
+sufficient comments for a reader to understand your reasoning and code.
+
+<!-------------------------- Start your work below ---------------------------->
+
+``` r
+### 1. Plot the distribution of a numeric variable
+### plot the boxplot of flow and the plot gives a general sense on how the flow levels were distributed. 
+### The plot shows that the distribution of flow levels is highly right-skewed.
+ggplot(flow_sample) +
+  geom_boxplot(aes(y = flow), fill = "steelblue")
+```
+
+    ## Warning: Removed 2 rows containing non-finite values (stat_boxplot).
+
+![](mini-project-1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+### 5. Filter observations in your data according to your own criteria
+### It is natural to split the dataset based on extreme type, so that later we can 
+### explore the maximum flows and minimum flows separately.
+### filter the observations of annual minimum flow
+flow_sample %>%
+  filter(extreme_type == "minimum")
+```
+
+    ## # A tibble: 109 × 7
+    ##    station_id  year extreme_type month   day  flow sym  
+    ##    <chr>      <dbl> <chr>        <dbl> <dbl> <dbl> <chr>
+    ##  1 05BB001     1909 minimum         NA    NA NA    <NA> 
+    ##  2 05BB001     1910 minimum         NA    NA NA    <NA> 
+    ##  3 05BB001     1911 minimum          2    27  5.75 <NA> 
+    ##  4 05BB001     1912 minimum          3    14  5.8  <NA> 
+    ##  5 05BB001     1913 minimum          3    18  6.12 B    
+    ##  6 05BB001     1914 minimum         11    17  7.16 <NA> 
+    ##  7 05BB001     1915 minimum          1    27  6.94 <NA> 
+    ##  8 05BB001     1916 minimum          3     2  6.97 B    
+    ##  9 05BB001     1917 minimum          2    23  6.06 B    
+    ## 10 05BB001     1918 minimum          2    20  6.03 B    
+    ## # … with 99 more rows
+    ## # ℹ Use `print(n = ...)` to see more rows
+
+``` r
+### filter the observations of annual maximum flow
+flow_sample %>%
+  filter(extreme_type == "maximum")
+```
+
+    ## # A tibble: 109 × 7
+    ##    station_id  year extreme_type month   day  flow sym  
+    ##    <chr>      <dbl> <chr>        <dbl> <dbl> <dbl> <chr>
+    ##  1 05BB001     1909 maximum          7     7   314 <NA> 
+    ##  2 05BB001     1910 maximum          6    12   230 <NA> 
+    ##  3 05BB001     1911 maximum          6    14   264 <NA> 
+    ##  4 05BB001     1912 maximum          8    25   174 <NA> 
+    ##  5 05BB001     1913 maximum          6    11   232 <NA> 
+    ##  6 05BB001     1914 maximum          6    18   214 <NA> 
+    ##  7 05BB001     1915 maximum          6    27   236 <NA> 
+    ##  8 05BB001     1916 maximum          6    20   309 <NA> 
+    ##  9 05BB001     1917 maximum          6    17   174 <NA> 
+    ## 10 05BB001     1918 maximum          6    15   345 <NA> 
+    ## # … with 99 more rows
+    ## # ℹ Use `print(n = ...)` to see more rows
+
+``` r
+### 7. Make a new tibble with a subset of your data
+### Here we choose the subset based on two criteria: extreme type is maximum, and flow level record is not missing.
+### make new tibble with recorded maximum flows
+maximum_flow = 
+  flow_sample %>%
+  filter(extreme_type == "maximum", !is.na(flow))
+maximum_flow
+```
+
+    ## # A tibble: 109 × 7
+    ##    station_id  year extreme_type month   day  flow sym  
+    ##    <chr>      <dbl> <chr>        <dbl> <dbl> <dbl> <chr>
+    ##  1 05BB001     1909 maximum          7     7   314 <NA> 
+    ##  2 05BB001     1910 maximum          6    12   230 <NA> 
+    ##  3 05BB001     1911 maximum          6    14   264 <NA> 
+    ##  4 05BB001     1912 maximum          8    25   174 <NA> 
+    ##  5 05BB001     1913 maximum          6    11   232 <NA> 
+    ##  6 05BB001     1914 maximum          6    18   214 <NA> 
+    ##  7 05BB001     1915 maximum          6    27   236 <NA> 
+    ##  8 05BB001     1916 maximum          6    20   309 <NA> 
+    ##  9 05BB001     1917 maximum          6    17   174 <NA> 
+    ## 10 05BB001     1918 maximum          6    15   345 <NA> 
+    ## # … with 99 more rows
+    ## # ℹ Use `print(n = ...)` to see more rows
+
+``` r
+### 8. Use a density plot to explore any of your variables 
+### make density plot of flow, this again gives a general sense on how the flow levels are distributed.
+### The density is bimodal, which makes sense because the dataset includes both minimum and maximum flow levels.
+ggplot(flow_sample) +
+  geom_density(aes(x = flow))
+```
+
+    ## Warning: Removed 2 rows containing non-finite values (stat_density).
+
+![](mini-project-1_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+
+<!----------------------------------------------------------------------------->
+
+# Task 3: Choose research questions
+
+**(4 points)** So far, you have chosen a dataset and gotten familiar
+with it through exploring the data. You have also brainstormed one
+research question that interested you (Task 1.4). Now it’s time to pick
+4 research questions that you would like to explore in Milestone 2!
+Write the 4 questions and any additional comments below.
+
+<!--- *****START HERE***** --->
+
+1.  On which year was the most extreme maximum flow occured?
+2.  For how many years do we have 0 as annual minimum flow?
+3.  What is the probability of have an annual maximum flow exceeding
+    300?
+4.  When do we normally observe a maximum flow in a year?
+    <!----------------------------->
+
+# Overall reproducibility/Cleanliness/Coherence Checklist
+
+## Coherence (0.5 points)
+
+The document should read sensibly from top to bottom, with no major
+continuity errors. An example of a major continuity error is having a
+data set listed for Task 3 that is not part of one of the data sets
+listed in Task 1.
+
+## Error-free code (3 points)
+
+For full marks, all code in the document should run without error. 1
+point deduction if most code runs without error, and 2 points deduction
+if more than 50% of the code throws an error.
+
+## Main README (1 point)
+
+There should be a file named `README.md` at the top level of your
+repository. Its contents should automatically appear when you visit the
+repository on GitHub.
+
+Minimum contents of the README file:
+
+-   In a sentence or two, explains what this repository is, so that
+    future-you or someone else stumbling on your repository can be
+    oriented to the repository.
+-   In a sentence or two (or more??), briefly explains how to engage
+    with the repository. You can assume the person reading knows the
+    material from STAT 545A. Basically, if a visitor to your repository
+    wants to explore your project, what should they know?
+
+Once you get in the habit of making README files, and seeing more README
+files in other projects, you’ll wonder how you ever got by without them!
+They are tremendously helpful.
+
+## Output (1 point)
+
+All output is readable, recent and relevant:
+
+-   All Rmd files have been `knit`ted to their output md files.
+-   All knitted md files are viewable without errors on Github. Examples
+    of errors: Missing plots, “Sorry about that, but we can’t show files
+    that are this big right now” messages, error messages from broken R
+    code
+-   All of these output files are up-to-date – that is, they haven’t
+    fallen behind after the source (Rmd) files have been updated.
+-   There should be no relic output files. For example, if you were
+    knitting an Rmd to html, but then changed the output to be only a
+    markdown file, then the html file is a relic and should be deleted.
+
+(0.5 point deduction if any of the above criteria are not met. 1 point
+deduction if most or all of the above criteria are not met.)
+
+Our recommendation: right before submission, delete all output files,
+and re-knit each milestone’s Rmd file, so that everything is up to date
+and relevant. Then, after your final commit and push to Github, CHECK on
+Github to make sure that everything looks the way you intended!
+
+## Tagged release (0.5 points)
+
+You’ve tagged a release for Milestone 1.
+
+### Attribution
+
+Thanks to Icíar Fernández Boyano for mostly putting this together, and
+Vincenzo Coia for launching.
