@@ -18,7 +18,7 @@ Milestone 1 comprises **3** Exercises:
 To achieve this, the following files have been created and reside within the GitHub repository:
 Document name  | Description     
 ---------------|------------
-README.md |a short description of the project [this file]
+README.md |a short description of the project
 mini-project-1.Rmd | contains the dataset, initial data analysis and research questions
 mini-project-1.md | mini-project-1.Rmd knitted into a github-readable markdown file
 mini-project-1_files/figure-gfm | contains the figures presented in mini-project-1.md
