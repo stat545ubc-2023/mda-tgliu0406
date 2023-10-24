@@ -16,11 +16,7 @@ To achieve this, the following files have been created and reside within the Git
 Document name  | Description     
 ---------------|------------
 README.md |a short description of the project
-mini-project-1.Rmd | contains the dataset, initial data analysis and research questions
-mini-project-1.md | mini-project-1.Rmd knitted into a github-readable markdown file
-mini-project-1_files/figure-gfm | contains the figures presented in mini-project-1.md
-mini-project-2.Rmd | contains the dataset, initial research questions and the following data manipulation
-mini-project-2.md | mini-project-2.Rmd knitted into a github-readable markdown file
-mini-project-2_files/figure-gfm | contains the figures presented in mini-project-2.md
+milestone 1 | contains the dataset, initial data analysis and research questions for milestone 1
+milestone 2 | contains the dataset, initial research questions and the following data manipulation for milestone 2
 output/ | contains the RDS and csv files produced in mini-project-2.md in task 4
 
