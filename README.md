@@ -16,7 +16,7 @@ To achieve this, the following files have been created and reside within the Git
 Document name  | Description     
 ---------------|------------
 README.md |a short description of the project
-milestone 1 | contains the dataset, initial data analysis and research questions for milestone 1
-milestone 2 | contains the dataset, initial research questions and the following data manipulation for milestone 2
+milestone 1/ | contains the dataset, initial data analysis and research questions for milestone 1
+milestone 2/ | contains the dataset, initial research questions and the following data manipulation for milestone 2
 output/ | contains the RDS and csv files produced in mini-project-2.md in task 4
 
