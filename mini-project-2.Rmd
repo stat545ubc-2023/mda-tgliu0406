@@ -1,6 +1,6 @@
 ---
 title: "Mini Data Analysis Milestone 2"
-output: html_document
+output: github_document
 ---
 
 *To complete this milestone, you can either edit [this `.rmd` file](https://raw.githubusercontent.com/UBC-STAT/stat545.stat.ubc.ca/master/content/mini-project/mini-project-2.Rmd) directly. Fill in the sections that are commented out with `<!--- start your work here--->`. When you are done, make sure to knit to an `.md` file by changing the output in the YAML header to `github_document`, before submitting a tagged release on canvas.*
@@ -56,10 +56,10 @@ From milestone 1, you should have an idea of the basic structure of your dataset
 First, write out the 4 research questions you defined in milestone 1 were. This will guide your work through milestone 2:
 
 <!-------------------------- Start your work below ---------------------------->
-1. *FILL_THIS_IN*
-2. *FILL_THIS_IN*
-3. *FILL_THIS_IN*
-4. *FILL_THIS_IN*
+1. On which year was the most extreme maximum flow occured?
+2. For how many years do we have 0 as annual minimum flow?
+3. What is the probability of have an annual maximum flow exceeding 300?
+4. When do we normally observe a maximum flow in a year?
 <!----------------------------------------------------------------------------->
 
 Here, we will investigate your data using various data manipulation and graphing functions.
@@ -92,6 +92,104 @@ Using variables and/or tables you made in one of the "Summarizing" tasks:
 Make sure it's clear what research question you are doing each operation for!
 
 <!------------------------- Start your work below ----------------------------->
+```{r}
+### Research question 1. On which year was the most extreme maximum flow occured?
+### 1: range, mean, count, and standard deviation. Now we know that the maximum flow is 466.
+# Now we know the flow level of the most extreme maximum flow on record
+flow_summary = 
+  flow_sample %>% 
+  filter(!is.na(flow), !is.na(extreme_type)) %>%
+  group_by(extreme_type) %>%
+  summarize(minimum = min(flow),
+            maximum = max(flow),
+            mean = mean(flow),
+            count = n(),
+            standard_deviation = sd(flow))
+
+
+### 6. Create a graph of your choosing, make one of the axes logarithmic, and format the axes labels so that they are "pretty" or easier to read.
+# It seems that the maximum flow occurred in 2013, although the log scale does not make a better plot.
+flow_sample %>%
+  ggplot() +
+  geom_col(aes(x = year, y = flow)) + 
+  scale_y_log10() 
+
+
+```
+
+
+```{r}
+### Research question 2. For how many years do we have 0 as annual minimum flow?
+### 3.  Create a categorical variable with 3 or more groups from an existing numerical variable. 
+# We can then use count function on "extreme_type = minimum" and "flow_level = no flow" to get the number of years where annual minimum flow is 0
+flow_categorized = 
+  flow_sample %>%
+  mutate(flow_level = case_when(flow == 0 ~ "no flow",
+                                flow <= 100 ~ "low flow",
+                                flow <= 300 ~ "medium flow",
+                                TRUE ~ "high flow"))
+
+### 9. Create 3 histograms, with each histogram having different sized bins. Pick the "best" one and explain why it is the best.
+# To answer the research question, all three of the following histograms suffice (no minimum flow equals to 0). However,histogram with binwidth of 0.5 gives the best illustration of the general distribution of minimum flow.
+flow_categorized %>%
+  filter(extreme_type == "minimum") %>%
+  ggplot(aes(flow)) +
+  geom_histogram(binwidth = 0.1)
+flow_categorized %>%
+  filter(extreme_type == "minimum") %>%
+  ggplot(aes(flow)) +
+  geom_histogram(binwidth = 0.5)
+flow_categorized %>%
+  filter(extreme_type == "minimum") %>%
+  ggplot(aes(flow)) +
+  geom_histogram(binwidth = 5)
+```
+
+
+```{r}
+### Research question 3. What is the probability of have an annual maximum flow exceeding 300?
+### 3.  Create a categorical variable with 3 or more groups from an existing numerical variable. 
+# Similar to the last research question, We can then use count function on "extreme_type = maximum" and "flow_level = high flow" to get the number of years where annual manimum flow is above 300
+flow_categorized = 
+  flow_sample %>%
+  mutate(flow_level = case_when(flow == 0 ~ "no flow",
+                                flow <= 100 ~ "low flow",
+                                flow <= 300 ~ "medium flow",
+                                TRUE ~ "high flow"))
+
+### 9. Create 3 histograms, with each histogram having different sized bins. Pick the "best" one and explain why it is the best.
+# Histogram with binwidth of 10 is the most appropriate one for the research question and for illustrating the flow distribution. Just by observing, about 5% of the maximum flows were above 300.
+flow_categorized %>%
+  filter(extreme_type == "maximum") %>%
+  ggplot(aes(flow)) +
+  geom_histogram(binwidth = 1)
+flow_categorized %>%
+  filter(extreme_type == "maximum") %>%
+  ggplot(aes(flow)) +
+  geom_histogram(binwidth = 10)
+flow_categorized %>%
+  filter(extreme_type == "maximum") %>%
+  ggplot(aes(flow)) +
+  geom_histogram(binwidth = 100)
+```
+
+
+```{r}
+### Research question 4. When do we normally observe a maximum flow in a year?
+### 4. Compute the proportion and counts in each category of one categorical variable across the groups of another categorical variable from your data.
+# Now we know that maximum flows were only observed during May to August, and most frequently in June.
+flow_summary_month = 
+  flow_sample %>% 
+  filter(!is.na(flow), !is.na(extreme_type)) %>%
+  group_by(extreme_type, month) %>%
+  summarize(count = n(), .groups = "keep")
+
+### 8. Create a graph that has at least two geom layers. 
+# Clearly, most maximum flow occured during June.
+ggplot(flow_summary_month, aes(x = month, y = count)) +
+  geom_col() + 
+  geom_label(aes(label = extreme_type), nudge_y = 5, size = 3)
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -100,7 +198,16 @@ Make sure it's clear what research question you are doing each operation for!
 Based on the operations that you've completed, how much closer are you to answering your research questions? Think about what aspects of your research questions remain unclear. Can your research questions be refined, now that you've investigated your data a bit more? Which research questions are yielding interesting results?
 
 <!------------------------- Write your answer here ---------------------------->
+For the following three questions, the above data analysis can fully answer them: 
+1. On which year was the most extreme maximum flow occured?
+2. For how many years do we have 0 as annual minimum flow?
+4. When do we normally observe a maximum flow in a year?
 
+For question 3, "What is the probability of have an annual maximum flow exceeding 300?", the plot can give an approximate answer, but this answer is not very accurate. 
+
+Question 4 did yield suprising result because the data shows that maximum flows were only observed during summer, and minimum flows were only observed during the other three season. This is in accordance to our commonsense because we anticipate greater precipitation and snowmelt during summer.
+
+Question 2 also yielded interesting result, showing that the minimum flow never reached 0. This may be because the station is located in a relatively humid place.
 
 <!----------------------------------------------------------------------------->
 
@@ -119,7 +226,7 @@ A reminder of the definition of *tidy* data:
 Based on the definition above, can you identify if your data is tidy or untidy? Go through all your columns, or if you have \>8 variables, just pick 8, and explain whether the data is untidy or tidy.
 
 <!--------------------------- Start your work below --------------------------->
-
+The "flow_sample" is a tidy data set. Each row corresponds to an observation of the flow, each column corresponds to a variable, and each cell corresponds to a value of that variable of that observation.
 <!----------------------------------------------------------------------------->
 
 ### 2.2 (4 points)
@@ -131,6 +238,23 @@ If your data is untidy, then tidy it! Then, untidy it back to it's original stat
 Be sure to explain your reasoning for this task. Show us the "before" and "after".
 
 <!--------------------------- Start your work below --------------------------->
+```{r}
+# untidy the data by expanding the extreme_type column
+untidy_flow = pivot_wider(flow_sample, 
+                          names_from = extreme_type,
+                          values_from = flow)
+untidy_flow
+
+# tidy the data back to the original one
+tidy_flow = 
+  pivot_longer(untidy_flow, 
+               cols = c("maximum", "minimum"), 
+               names_to = "extreme_type", 
+               values_to = "flow") %>%
+  filter(!is.na(flow))
+tidy_flow
+  
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -140,15 +264,16 @@ Now, you should be more familiar with your data, and also have made progress in 
 
 <!-------------------------- Start your work below ---------------------------->
 
-1.  *FILL_THIS_IN*
-2.  *FILL_THIS_IN*
+1.  What is the probability of have an annual maximum flow exceeding 300?
+2.  On which year was the most extreme maximum flow occured?
 
 <!----------------------------------------------------------------------------->
 
 Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
-
+For question 1: I did not get an accurate probability of exceedance, so I would like to explore more.
+For question 2: Although this question was fully answered in task 1, but the analysis method was not the most appropriate and required brutal force. We aim to answer that question in a more clever way.
 <!----------------------------------------------------------------------------->
 
 Now, try to choose a version of your data that you think will be appropriate to answer these 2 questions. Use between 4 and 8 functions that we've covered so far (i.e. by filtering, cleaning, tidy'ing, dropping irrelevant columns, etc.).
