@@ -45,6 +45,8 @@ Begin by loading your data and the tidyverse package below:
 ```{r, message = FALSE}
 library(datateachr) # <- might contain the data you picked!
 library(tidyverse)
+library(broom)
+library(here)
 ```
 
 # Task 1: Process and summarize your data 
@@ -281,6 +283,28 @@ Now, try to choose a version of your data that you think will be appropriate to 
 (If it makes more sense, then you can make/pick two versions of your data, one for each research question.) 
 
 <!--------------------------- Start your work below --------------------------->
+```{r}
+### 1.  What is the probability of have an annual maximum flow exceeding 300?
+# It is very clear from the following table that there are 10 maximum flows exceeding 300, and the probability of having them is 0.0917.
+flow_sample %>%
+  filter(!is.na(flow), !is.na(extreme_type)) %>% # remove incomplete observations
+  filter(extreme_type == "maximum") %>% #keep maximum observations
+  mutate(flow_level = case_when(flow <= 300 ~ "small flow",
+                                TRUE ~ "high flow")) %>%
+  count(flow_level) %>%
+  mutate(prop = prop.table(n))
+
+### 2.  On which year was the most extreme maximum flow occured?
+# The following tibble is beyond what the research question is asking! We know that the most extreme maximum flow occurred on June 21st, 2013, and its level is 466. We can also know that the second most extreme maximum flow occurred on June 14th, 1923, and so on.
+flow_sample %>%
+  filter(!is.na(flow), !is.na(extreme_type)) %>% # remove incomplete observations
+  filter(extreme_type == "maximum") %>% # keep maximum observations
+  select(c(year, month, day, flow)) %>% # keep useful information
+  arrange(desc(flow))
+
+```
+
+<!----------------------------------------------------------------------------->
 
 # Task 3: Modelling
 
@@ -290,9 +314,13 @@ Pick a research question from 1.2, and pick a variable of interest (we'll call i
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Research Question**: FILL_THIS_IN
+<!----------------------------------------------------------------------------->
 
-**Variable of interest**: FILL_THIS_IN
+Note: There is no such research question in 1.2 that can be resolved using a model or a hypothesis test. Therefore, I'll modify this question "When do we normally observe a maximum flow in a year?" to better fit the purpose here.
+
+**Research Question**: Fit a linear model of flow level based on the month of occurance.
+
+**Variable of interest**: flow
 
 <!----------------------------------------------------------------------------->
 
@@ -307,6 +335,15 @@ Fit a model or run a hypothesis test that provides insight on this variable with
     -   You could use `lm()` to test for significance of regression coefficients.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+# It doesn't make sense to fit mixed model for both minimum flow and maximum flow,
+# so we'll focus on maximum flow for the rest of this problem.
+flow_max = flow_sample %>% filter(extreme_type == "maximum")
+# fit linear model
+flow_month = lm(flow ~ month, data = flow_max)
+# print model output
+summary(flow_month)
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -319,6 +356,10 @@ Produce something relevant from your fitted model: either predictions on Y, or a
 -   Obtain your results using the `broom` package if possible. If your model is not compatible with the broom function you're needing, then you can obtain your results by some other means, but first indicate which broom function is not compatible.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+# tibble containing the estimates, sd's, statistics, and p values of parameters
+model_components = tidy(flow_month)
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -334,6 +375,9 @@ Take a summary table that you made from Task 1, and write it as a csv file in yo
 -   **Reproducibility criteria**: You should be able to delete the csv file, and remake it simply by knitting this Rmd file.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+write.csv(flow_summary, file = here("output/flow_summary.csv"))
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -344,6 +388,10 @@ Write your model object from Task 3 to an R binary file (an RDS), and load it ag
 -   The same robustness and reproducibility criteria as in 4.1 apply here.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+saveRDS(flow_month, file = here("output/flow_month.RDS"))
+readRDS(here("output/flow_month.RDS"))
+```
 
 <!----------------------------------------------------------------------------->
 
